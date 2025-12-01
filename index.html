@@ -209,7 +209,6 @@
       background: #4c5c6d;
     }
 
-    /* Modal */
     .modal {
       position: fixed;
       top: 0;
@@ -316,7 +315,7 @@
 
   <script>
     /* ------------------------------------------ */
-    /* BACKGROUND SKY ANIMATION (KEEP ORIGINAL)   */
+    /* BACKGROUND SKY ANIMATION (NO CHANGE)       */
     /* ------------------------------------------ */
 
     const canvas = document.getElementById("bg");
@@ -332,7 +331,8 @@
 
     let mouse = { x: w / 2, y: h / 2 };
     window.addEventListener("mousemove", e => {
-      mouse.x = e.clientX; mouse.y = e.clientY;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
     });
 
     const stars = Array.from({ length: 150 }, () => ({
@@ -350,8 +350,8 @@
       shootingStars.push({
         x: Math.random() * w * 0.5,
         y: Math.random() * h * 0.3,
-        vx: 6 + Math.random() * 2,
-        vy: 3 + Math.random() * 1.5,
+        vx: 6,
+        vy: 3,
         length: 200
       });
     }
@@ -363,7 +363,8 @@
       ctx.clearRect(0, 0, w, h);
 
       for (let s of stars) {
-        s.x += s.vx; s.y += s.vy;
+        s.x += s.vx;
+        s.y += s.vy;
         if (s.x < 0) s.x = w;
         if (s.x > w) s.x = 0;
         if (s.y < 0) s.y = h;
@@ -390,28 +391,50 @@
         ctx.lineTo(s.x - s.length, s.y - s.length * 0.6);
         ctx.stroke();
 
-        s.x += s.vx; s.y += s.vy;
+        s.x += s.vx;
+        s.y += s.vy;
         if (s.x > w + 300 || s.y > h + 300) shootingStars.splice(i, 1);
       }
-
-      const glow = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 80);
-      glow.addColorStop(0, "rgba(255,255,255,0.15)");
-      glow.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = glow;
-      ctx.beginPath();
-      ctx.arc(mouse.x, mouse.y, 80, 0, 2 * Math.PI);
-      ctx.fill();
 
       requestAnimationFrame(animateSky);
     }
     animateSky();
 
     /* ------------------------------------------ */
-    /* PRODUCT INTERFACE LOGIC                    */
+    /* ALWAYS SHOW PLACEHOLDER UNTIL IMAGE LOADS  */
+    /* ------------------------------------------ */
+
+    function drawPlaceholder(canvas, category) {
+      const ctx2 = canvas.getContext("2d");
+      const W = canvas.width, H = canvas.height;
+
+      ctx2.clearRect(0, 0, W, H);
+      ctx2.strokeStyle = "#fff";
+      ctx2.lineWidth = 3;
+
+      if (category === "display") ctx2.strokeRect(W * 0.1, H * 0.2, W * 0.8, H * 0.5);
+      else if (category === "keyboard") ctx2.strokeRect(W * 0.15, H * 0.4, W * 0.7, H * 0.2);
+      else if (category === "mouse") {
+        ctx2.beginPath();
+        ctx2.ellipse(W / 2, H / 2, W * 0.25, H * 0.35, 0, 0, 2 * Math.PI);
+        ctx2.stroke();
+      }
+      else if (category === "chairs") ctx2.strokeRect(W * 0.3, H * 0.25, W * 0.4, H * 0.5);
+      else if (category === "audio") {
+        ctx2.beginPath();
+        ctx2.arc(W * 0.3, H * 0.5, W * 0.2, 0, 2 * Math.PI);
+        ctx2.stroke();
+        ctx2.beginPath();
+        ctx2.arc(W * 0.7, H * 0.5, W * 0.2, 0, 2 * Math.PI);
+        ctx2.stroke();
+      }
+    }
+
+    /* ------------------------------------------ */
+    /* PRODUCT LIST                                */
     /* ------------------------------------------ */
 
     const products = [
-      /* (The product list is unchanged — keeping your original values) */
       {
         name: "Ultra 32″ Curved Monitor",
         category: "display",
@@ -495,42 +518,19 @@
       }
     ];
 
-    const grid = document.getElementById("productGrid");
-    const catBtns = document.querySelectorAll(".categories button");
-    const searchInput = document.getElementById("searchInput");
-
-    function drawPlaceholder(canvasEl, category) {
-      const ctx2 = canvasEl.getContext("2d");
-      const W = canvasEl.width, H = canvasEl.height;
-      ctx2.clearRect(0, 0, W, H);
-      ctx2.strokeStyle = "#fff";
-      ctx2.lineWidth = 3;
-
-      if (category === "display") {
-        ctx2.strokeRect(W * 0.1, H * 0.2, W * 0.8, H * 0.5);
-      } else if (category === "keyboard") {
-        ctx2.strokeRect(W * 0.15, H * 0.4, W * 0.7, H * 0.2);
-      } else if (category === "mouse") {
-        ctx2.beginPath();
-        ctx2.ellipse(W / 2, H / 2, W * 0.25, H * 0.35, 0, 0, 2 * Math.PI);
-        ctx2.stroke();
-      } else if (category === "chairs") {
-        ctx2.strokeRect(W * 0.3, H * 0.25, W * 0.4, H * 0.5);
-      } else if (category === "audio") {
-        ctx2.beginPath();
-        ctx2.arc(W * 0.3, H * 0.5, W * 0.2, 0, 2 * Math.PI);
-        ctx2.stroke();
-        ctx2.beginPath();
-        ctx2.arc(W * 0.7, H * 0.5, W * 0.2, 0, 2 * Math.PI);
-        ctx2.stroke();
-      }
-    }
+    /* ------------------------------------------ */
+    /* PRODUCT RENDERING                          */
+    /* ------------------------------------------ */
 
     function renderProducts(cat = "all", search = "") {
+      const grid = document.getElementById("productGrid");
       grid.innerHTML = "";
-      let list = products.filter(p =>
-        (cat === "all" || p.category === cat) &&
-        (p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search))
+
+      const list = products.filter(
+        p =>
+          (cat === "all" || p.category === cat) &&
+          (p.name.toLowerCase().includes(search) ||
+            p.description.toLowerCase().includes(search))
       );
 
       list.forEach(p => {
@@ -547,28 +547,37 @@
             </div>
           </div>
         `;
+
         grid.appendChild(card);
 
-        const c = card.querySelector("canvas");
-        c.width = c.offsetWidth;
-        c.height = c.offsetWidth * 0.75;
+        const canvas = card.querySelector("canvas");
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetWidth * 0.75;
 
-        if (p.images && p.images.length > 0) {
+        drawPlaceholder(canvas, p.category);
+
+        if (p.images.length > 0) {
           const img = new Image();
-          img.onload = () => {
-            const cx = c.getContext("2d");
-            cx.clearRect(0, 0, c.width, c.height);
-            cx.drawImage(img, 0, 0, c.width, c.height);
-          };
-          img.onerror = () => drawPlaceholder(c, p.category);
           img.src = p.images[0];
-        } else {
-          drawPlaceholder(c, p.category);
+
+          img.onload = () => {
+            const cx = canvas.getContext("2d");
+            cx.clearRect(0, 0, canvas.width, canvas.height);
+            cx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          };
+
+          img.onerror = () => {
+            // keep placeholder
+          };
         }
 
         card.querySelector(".btn-details").onclick = () => viewDetails(p);
       });
     }
+
+    /* ------------------------------------------ */
+    /* VIEW DETAILS MODAL                         */
+    /* ------------------------------------------ */
 
     function viewDetails(prod) {
       document.getElementById("modalTitle").textContent = prod.name;
@@ -585,24 +594,26 @@
       const imgsDiv = document.getElementById("modalImages");
       imgsDiv.innerHTML = "";
 
-      const imgs = (prod.images && prod.images.length > 0) ? prod.images : [];
-      imgs.slice(0, 3).forEach(src => {
+      prod.images.forEach(src => {
         const cvs = document.createElement("canvas");
-        cvs.width = 200; cvs.height = 150;
+        cvs.width = 200;
+        cvs.height = 150;
         imgsDiv.appendChild(cvs);
 
-        if (src) {
-          const img = new Image();
-          img.onload = () => {
-            const cctx = cvs.getContext("2d");
-            cctx.clearRect(0, 0, cvs.width, cvs.height);
-            cctx.drawImage(img, 0, 0, cvs.width, cvs.height);
-          };
-          img.onerror = () => drawPlaceholder(cvs, prod.category);
-          img.src = src;
-        } else {
-          drawPlaceholder(cvs, prod.category);
-        }
+        drawPlaceholder(cvs, prod.category);
+
+        const img = new Image();
+        img.src = src;
+
+        img.onload = () => {
+          const cctx = cvs.getContext("2d");
+          cctx.clearRect(0, 0, cvs.width, cvs.height);
+          cctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+        };
+
+        img.onerror = () => {
+          // leave placeholder visible
+        };
       });
 
       document.getElementById("productModal").style.display = "flex";
@@ -611,6 +622,13 @@
     function closeModal() {
       document.getElementById("productModal").style.display = "none";
     }
+
+    /* ------------------------------------------ */
+    /* CATEGORY & SEARCH EVENTS                    */
+    /* ------------------------------------------ */
+
+    const catBtns = document.querySelectorAll(".categories button");
+    const searchInput = document.getElementById("searchInput");
 
     catBtns.forEach(btn => {
       btn.onclick = () => {
@@ -621,12 +639,13 @@
     });
 
     searchInput.addEventListener("input", () => {
-      renderProducts(document.querySelector(".categories button.active").dataset.cat, searchInput.value.toLowerCase());
+      const activeCat = document.querySelector(".categories button.active").dataset.cat;
+      renderProducts(activeCat, searchInput.value.toLowerCase());
     });
 
     renderProducts();
-
   </script>
+
 </body>
 
 </html>
