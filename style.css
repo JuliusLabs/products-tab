@@ -52,6 +52,15 @@ nav {
 }
 
 /* PRODUCT CARD APPEAR */
+
+.price {
+    color: #7ddaff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+    text-shadow: 0 0 6px rgba(125, 218, 255, 0.4);
+}
+
 .product-card {
     background: #121E2C;
     border: 1px solid #2f3c4a;

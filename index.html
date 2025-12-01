@@ -618,6 +618,7 @@
       {
         name: "Ultra 32″ Curved Monitor",
         category: "display",
+        price: 399,
         description: "32″ QHD curved monitor with high refresh rate and ambient RGB.",
         specs: { "Size": "32 in", "Refresh": "165 Hz", "Resolution": "2560×1440", "Panel": "VA Curved", "RGB": "Yes" },
         images: ["images/ultra32_1.webp", "images/ultra32_2.webp", "images/ultra32_3.webp"]
@@ -625,6 +626,7 @@
       {
         name: "Budget 27″ IPS Monitor",
         category: "display",
+        price: 199,
         description: "27″ IPS panel monitor 144Hz — great balance for budget-conscious gamers.",
         specs: { "Size": "27 in", "Refresh": "144 Hz", "Resolution": "1920×1080", "Panel": "IPS", "RGB": "No" },
         images: ["images/27inch_1.webp", "images/27inch_2.webp"]
@@ -632,6 +634,7 @@
       {
         name: "Compact 24″ FHD Monitor",
         category: "display",
+        price: 129,
         description: "24″ Full HD monitor, 75Hz — compact & ideal for small setups.",
         specs: { "Size": "24 in", "Refresh": "75 Hz", "Resolution": "1920×1080", "Panel": "TN", "RGB": "No" },
         images: ["images/24compact_1.webp", "images/24compact_2.webp"]
@@ -640,6 +643,7 @@
       {
         name: "RGB Mechanical Keyboard Pro",
         category: "keyboard",
+        price: 89,
         description: "Full-size mechanical keyboard with blue switches and per-key RGB.",
         specs: { "Switch": "Blue", "Layout": "104-key", "Lighting": "Full RGB", "Connection": "USB-C" },
         images: ["images/rgbmech_1.webp", "images/rgbmech_2.webp", "images/rgbmech_3.webp"]
@@ -647,6 +651,7 @@
       {
         name: "Compact TKL Keyboard",
         category: "keyboard",
+        price: 59,
         description: "TKL layout mechanical keyboard, linear switches, minimalistic build.",
         specs: { "Switch": "Red", "Layout": "87-key TKL", "Lighting": "White LED", "Connection": "USB Wired" },
         images: ["images/tklkey_1.webp", "images/tklkey_2.webp"]
@@ -654,6 +659,7 @@
       {
         name: "Budget Membrane Keyboard",
         category: "keyboard",
+        price: 25,
         description: "Affordable membrane keyboard, no frills but reliable for everyday use.",
         specs: { "Type": "Membrane", "Layout": "Full 104-key", "Lighting": "None", "Connection": "USB Wired" },
         images: ["images/membranekey_1.webp", "images/membranekey_2.webp"]
@@ -662,6 +668,7 @@
       {
         name: "Ergonomic Gaming Mouse X1",
         category: "mouse",
+        price: 49,
         description: "High-DPI RGB gaming mouse with programmable buttons and ergonomic grip.",
         specs: { "DPI": "8000", "Buttons": "6", "Grip": "Palm/Claw", "Lighting": "RGB" },
         images: ["images/gamingm_1.webp", "images/gamingm_2.webp"]
@@ -669,6 +676,7 @@
       {
         name: "Budget Mouse M20",
         category: "mouse",
+        price: 19,
         description: "Affordable wired mouse with simple RGB lighting, ideal for basic gaming.",
         specs: { "DPI": "3200", "Buttons": "3", "Grip": "Palm", "Lighting": "RGB" },
         images: ["images/wiredm_1.webp", "images/wiredm_2.webp", "images/wiredm_3.webp"]
@@ -677,6 +685,7 @@
       {
         name: "Pro Gaming Chair Titan",
         category: "chairs",
+        price: 259,
         description: "Ergonomic chair with lumbar support, LED edges — built for long sessions.",
         specs: { "Material": "PU Leather", "MaxLoad": "150 kg", "Adjustable": "Height / Armrests / Recline", "Lighting": "LED", "Wheels": "360° Nylon" },
         images: ["images/gchair_1.webp", "images/gchair_2.webp", "images/gchair_3.webp"]
@@ -684,6 +693,7 @@
       {
         name: "Standard Gaming Chair Basic",
         category: "chairs",
+        price: 129,
         description: "Simple padded gaming chair with tilt lock and caster wheels.",
         specs: { "Material": "Fabric", "MaxLoad": "120 kg", "Adjustable": "Height", "Lighting": "No", "Wheels": "Caster Nylon" },
         images: ["images/schair_1.webp", "images/schair_2.webp", "images/schair_3.webp"]
@@ -692,6 +702,7 @@
       {
         name: "Surround Headset 7.1",
         category: "audio",
+        price: 69,
         description: "7.1 surround gaming headset with RGB earcups and noise-cancel mic.",
         specs: { "Driver": "50 mm", "Surround": "7.1 Virtual", "Mic": "Detachable", "Lighting": "RGB", "Connection": "3.5 mm Cable" },
         images: ["images/sheadset_1.webp", "images/sheadset_2.webp", "images/sheadset_3.webp"]
@@ -757,16 +768,17 @@
         card.style.animationDelay = `${index * 0.06}s`;
 
         card.innerHTML = `
-        <div class="product-thumb"><canvas></canvas></div>
-        <div class="product-info">
-          <h3>${p.name}</h3>
-          <p>${p.description}</p>
-          <div class="product-actions">
-            <button class="btn-cart">Add to Cart</button>
-            <button class="btn-details">View Details</button>
-          </div>
-        </div>
-      `;
+  <div class="product-thumb"><canvas></canvas></div>
+  <div class="product-info">
+    <h3>${p.name}</h3>
+    <p class="price">$${p.price}</p>
+    <p>${p.description}</p>
+    <div class="product-actions">
+      <button class="btn-cart">Add to Cart</button>
+      <button class="btn-details">View Details</button>
+    </div>
+  </div>
+`;
 
         grid.appendChild(card);
 
