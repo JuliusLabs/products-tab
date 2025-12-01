@@ -150,12 +150,18 @@
 
     .product-thumb {
       width: 100%;
-      aspect-ratio: 4/3;
       background: #1E2832;
       display: flex;
-      align-items: center;
       justify-content: center;
-      overflow: hidden;
+      align-items: center;
+    }
+
+    /* 🔥 FIX: canvas always visible size */
+    .product-thumb canvas {
+      width: 100% !important;
+      height: auto !important;
+      aspect-ratio: 4/3;
+      display: block;
     }
 
     .product-info {
@@ -401,7 +407,7 @@
     animateSky();
 
     /* ------------------------------------------ */
-    /* ALWAYS SHOW PLACEHOLDER UNTIL IMAGE LOADS  */
+    /* PLACEHOLDER ALWAYS SHOWS FIRST             */
     /* ------------------------------------------ */
 
     function drawPlaceholder(canvas, category) {
@@ -431,7 +437,7 @@
     }
 
     /* ------------------------------------------ */
-    /* PRODUCT LIST                                */
+    /* PRODUCT DATA                               */
     /* ------------------------------------------ */
 
     const products = [
@@ -526,11 +532,9 @@
       const grid = document.getElementById("productGrid");
       grid.innerHTML = "";
 
-      const list = products.filter(
-        p =>
-          (cat === "all" || p.category === cat) &&
-          (p.name.toLowerCase().includes(search) ||
-            p.description.toLowerCase().includes(search))
+      const list = products.filter(p =>
+        (cat === "all" || p.category === cat) &&
+        (p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search))
       );
 
       list.forEach(p => {
@@ -550,25 +554,23 @@
 
         grid.appendChild(card);
 
-        const canvas = card.querySelector("canvas");
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetWidth * 0.75;
+        const cvs = card.querySelector("canvas");
+        cvs.width = 400;     /* 🔥 FIXED SIZE */
+        cvs.height = 300;    /* 🔥 FIXED SIZE */
 
-        drawPlaceholder(canvas, p.category);
+        drawPlaceholder(cvs, p.category);
 
         if (p.images.length > 0) {
           const img = new Image();
           img.src = p.images[0];
 
           img.onload = () => {
-            const cx = canvas.getContext("2d");
-            cx.clearRect(0, 0, canvas.width, canvas.height);
-            cx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const cctx = cvs.getContext("2d");
+            cctx.clearRect(0, 0, cvs.width, cvs.height);
+            cctx.drawImage(img, 0, 0, cvs.width, cvs.height);
           };
 
-          img.onerror = () => {
-            // keep placeholder
-          };
+          img.onerror = () => { /* leave placeholder */ };
         }
 
         card.querySelector(".btn-details").onclick = () => viewDetails(p);
@@ -576,7 +578,7 @@
     }
 
     /* ------------------------------------------ */
-    /* VIEW DETAILS MODAL                         */
+    /* DETAILS MODAL                              */
     /* ------------------------------------------ */
 
     function viewDetails(prod) {
@@ -585,6 +587,7 @@
 
       const specList = document.getElementById("modalSpecs");
       specList.innerHTML = "";
+
       for (const key in prod.specs) {
         const li = document.createElement("li");
         li.textContent = `${key}: ${prod.specs[key]}`;
@@ -611,9 +614,7 @@
           cctx.drawImage(img, 0, 0, cvs.width, cvs.height);
         };
 
-        img.onerror = () => {
-          // leave placeholder visible
-        };
+        img.onerror = () => { /* keep placeholder */ };
       });
 
       document.getElementById("productModal").style.display = "flex";
@@ -624,7 +625,7 @@
     }
 
     /* ------------------------------------------ */
-    /* CATEGORY & SEARCH EVENTS                    */
+    /* CATEGORY / SEARCH                          */
     /* ------------------------------------------ */
 
     const catBtns = document.querySelectorAll(".categories button");
