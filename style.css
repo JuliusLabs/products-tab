@@ -1,0 +1,177 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* GLOBAL COLORS */
+html,
+body {
+    background: #1E2832;
+    color: #eee;
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* BEAUTIFUL SMOOTH GLOBAL TRANSITIONS */
+body,
+button,
+canvas,
+div,
+nav {
+    transition: 0.25s ease;
+}
+
+/* NAV GLOW */
+nav {
+    background: rgba(18, 30, 44, 0.9);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid #2f3c4a;
+    box-shadow: 0 0 20px rgba(80, 150, 255, 0.15);
+}
+
+/* HERO TEXT FADE-IN */
+.hero h1,
+.hero p {
+    animation: heroFade 1.4s ease forwards;
+    opacity: 0;
+}
+
+@keyframes heroFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* PRODUCT CARD APPEAR */
+.product-card {
+    background: #121E2C;
+    border: 1px solid #2f3c4a;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    animation: cardIn 0.6s ease forwards;
+}
+
+@keyframes cardIn {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 3D PARALLAX HOVER + GLOW */
+.product-card:hover {
+    transform: translateY(-8px) scale(1.03) rotateX(4deg);
+    box-shadow: 0 0 25px rgba(0, 170, 255, 0.25);
+    border-color: #5ecbff;
+}
+
+/* CANVAS: ALWAYS VISIBLE */
+.product-thumb canvas {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4/3;
+    display: block;
+    border-bottom: 1px solid #2f3c4a;
+}
+
+/* SHIMMER LOADING EFFECT */
+.shimmer {
+    background: linear-gradient(90deg, #2b3a4a 0%, #3f5368 50%, #2b3a4a 100%);
+    background-size: 200% 100%;
+    animation: shimmerAnim 1.3s infinite linear;
+}
+
+@keyframes shimmerAnim {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* BLUR-UP & FADE-IN */
+canvas.blur-up {
+    filter: blur(8px);
+    opacity: 0.7;
+    transition: filter 0.6s ease-out, opacity 0.6s ease-out;
+}
+
+canvas.loaded {
+    filter: blur(0px);
+    opacity: 1;
+}
+
+/* CATEGORY BUTTON RIPPLES */
+.categories button {
+    overflow: hidden;
+    position: relative;
+}
+
+.categories button:active::after {
+    content: "";
+    position: absolute;
+    width: 180%;
+    height: 180%;
+    background: rgba(255, 255, 255, 0.3);
+    top: -40%;
+    left: -40%;
+    border-radius: 50%;
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    from {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* MODAL CINEMATIC ZOOM */
+.modal {
+    backdrop-filter: blur(4px);
+    animation: modalFade 0.4s ease forwards;
+}
+
+@keyframes modalFade {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+
+    to {
+        opacity: 1;
+        backdrop-filter: blur(4px);
+    }
+}
+
+.modal-content {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+    animation: modalIn 0.45s ease forwards;
+}
+
+@keyframes modalIn {
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
